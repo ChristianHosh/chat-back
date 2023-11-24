@@ -1,4 +1,4 @@
-package com.chat.chatback.user;
+package com.chat.chatback.user.model;
 
 public enum UserRole {
     ROLE_USER,

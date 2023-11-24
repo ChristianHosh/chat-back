@@ -1,5 +1,7 @@
-package com.chat.chatback.user;
+package com.chat.chatback.user.dto;
 
+import com.chat.chatback.user.model.User;
+import com.chat.chatback.user.model.UserRole;
 import lombok.Builder;
 
 import java.io.Serializable;

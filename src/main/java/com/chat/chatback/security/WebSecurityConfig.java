@@ -1,13 +1,12 @@
-package com.chris.socialbox.config;
+package com.chat.chatback.security;
 
-import com.chris.socialbox.security.jwt.AuthEntryPointJwt;
-import com.chris.socialbox.security.jwt.AuthTokenFilter;
-import com.chris.socialbox.security.service.UserDetailServiceImpl;
+import com.chat.chatback.security.jwt.AuthEntryPointJwt;
+import com.chat.chatback.security.jwt.AuthTokenFilter;
+import com.chat.chatback.security.service.UserDetailServiceImpl;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpMethod;
 import org.springframework.security.access.hierarchicalroles.RoleHierarchy;
 import org.springframework.security.access.hierarchicalroles.RoleHierarchyImpl;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -67,7 +66,7 @@ public class WebSecurityConfig {
     @Bean
     public RoleHierarchy roleHierarchy() {
         RoleHierarchyImpl roleHierarchy = new RoleHierarchyImpl();
-        String hierarchy = "ROLE_ADMIN > ROLE_MODERATOR ROLE_USER \n ROLE_MODERATOR > ROLE_USER";
+        String hierarchy = "ROLE_ADMIN > ROLE_USER";
         roleHierarchy.setHierarchy(hierarchy);
         return roleHierarchy;
     }
@@ -76,8 +75,6 @@ public class WebSecurityConfig {
     public SecurityFilterChain filterChain(@NotNull HttpSecurity http) throws Exception {
         var adminAuth = AuthorityAuthorizationManager.<RequestAuthorizationContext>hasRole("ADMIN");
         adminAuth.setRoleHierarchy(roleHierarchy());
-        var moderatorAuth = AuthorityAuthorizationManager.<RequestAuthorizationContext>hasRole("MODERATOR");
-        moderatorAuth.setRoleHierarchy(roleHierarchy());
         var userAuth = AuthorityAuthorizationManager.<RequestAuthorizationContext>hasRole("USER");
         userAuth.setRoleHierarchy(roleHierarchy());
 
@@ -89,12 +86,10 @@ public class WebSecurityConfig {
                 .exceptionHandling(exception -> exception.authenticationEntryPoint(unauthorizedHandler))
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers(HttpMethod.GET, "/api/posts/**").permitAll()
-                        .requestMatchers(HttpMethod.POST, "/api/posts/**").access(userAuth)
-                        .requestMatchers(HttpMethod.PUT, "/api/posts/**").access(userAuth)
-                        .requestMatchers(HttpMethod.DELETE, "/api/posts/**").access(userAuth)
-                        .requestMatchers("/api/auth/**").permitAll()
-                        .requestMatchers("/api/users/**").permitAll()
+                        .requestMatchers("/api/users/auth/**").permitAll()
+                        .requestMatchers("/api/users/**").access(userAuth)
+                        .requestMatchers("/api/chat/**").access(userAuth)
+                        .requestMatchers("/ws").permitAll()
                         .requestMatchers("/error").permitAll()
                         .anyRequest().permitAll()
                 );

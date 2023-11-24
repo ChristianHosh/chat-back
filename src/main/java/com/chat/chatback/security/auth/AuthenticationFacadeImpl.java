@@ -1,9 +1,8 @@
-package com.chris.socialbox.security.auth;
+package com.chat.chatback.security.auth;
 
-import com.chris.socialbox.controller.error.DefaultErrorMessage;
-import com.chris.socialbox.exception.HttpNotFoundException;
-import com.chris.socialbox.model.User;
-import com.chris.socialbox.repository.UserRepository;
+import com.chat.chatback.error.HttpNotFoundException;
+import com.chat.chatback.user.model.User;
+import com.chat.chatback.user.service.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -11,7 +10,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
-public class AuthenticationFacade implements IAuthenticationFacade{
+public class AuthenticationFacadeImpl implements AuthenticationFacade {
 
     private final UserRepository userRepository;
 
@@ -22,13 +21,14 @@ public class AuthenticationFacade implements IAuthenticationFacade{
 
     @Override
     public User getAuthenticatedUser() {
-        return userRepository.findByEmail(getAuthentication().getName())
-                .orElseThrow( () -> new HttpNotFoundException(DefaultErrorMessage.USER_NOT_FOUND));
+        String username = getAuthentication().getName();
+        return userRepository.findByUsername(username)
+                .orElseThrow(() -> new HttpNotFoundException("user not found with username '" + username + "'"));
     }
 
     @Override
     public User getAuthenticatedUserOrNull() {
-        return userRepository.findByEmail(getAuthentication().getName())
+        return userRepository.findByUsername(getAuthentication().getName())
                 .orElse(null);
     }
 }

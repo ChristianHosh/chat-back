@@ -1,11 +1,18 @@
 package com.chat.chatback.chat.dto;
 
-import lombok.Builder;
+import java.io.Serializable;
 
-@Builder
-public record ChatMessageDTO(
+public record ChatMessageRequest(
         String content,
-        String authorUsername,
-        String recipientUsername
-) {
+        String senderUsername,
+        Long chatChannelId
+) implements Serializable {
+    @Override
+    public String toString() {
+        return "ChatMessageRequest{" +
+                "content='" + content + '\'' +
+                ", senderUsername='" + senderUsername + '\'' +
+                ", chatChannelId=" + chatChannelId +
+                '}';
+    }
 }

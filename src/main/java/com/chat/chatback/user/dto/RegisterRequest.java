@@ -1,5 +1,6 @@
-package com.chat.chatback.user;
+package com.chat.chatback.user.dto;
 
+import com.chat.chatback.user.model.User;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 

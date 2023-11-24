@@ -1,6 +1,6 @@
-package com.chat.chatback.chat;
+package com.chat.chatback.chat.model;
 
-import com.chat.chatback.user.User;
+import com.chat.chatback.user.model.User;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -20,20 +20,28 @@ public class ChatMessage {
     @Column(name = "id", nullable = false)
     private Long id;
 
-    @ManyToOne
-    @JoinColumn(name = "author_id", nullable = false)
-    private User author;
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "sender_id", nullable = false)
+    private User sender;
 
     @ManyToOne(optional = false)
-    @JoinColumn(name = "recipient_id", nullable = false)
-    private User recipient;
-
-    @Column(name = "content", nullable = false, length = 500)
-    private String content;
+    @JoinColumn(name = "chat_channel_id", nullable = false)
+    private ChatChannel chatChannel;
 
     @Column(name = "time_sent", nullable = false)
     private Date timeSent;
 
-    
+    @Column(name = "content", length = 500)
+    private String content;
 
+    @Override
+    public String toString() {
+        return "ChatMessage{" +
+                "id=" + id +
+                ", sender=" + sender +
+                ", chatChannel=" + chatChannel +
+                ", timeSent=" + timeSent +
+                ", content='" + content + '\'' +
+                '}';
+    }
 }

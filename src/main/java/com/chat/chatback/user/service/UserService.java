@@ -1,7 +1,13 @@
-package com.chat.chatback.user;
+package com.chat.chatback.user.service;
 
 import com.chat.chatback.error.HttpNotFoundException;
+import com.chat.chatback.security.auth.AuthenticationFacade;
 import com.chat.chatback.security.jwt.JwtUtils;
+import com.chat.chatback.user.dto.LoginRequest;
+import com.chat.chatback.user.dto.RegisterRequest;
+import com.chat.chatback.user.dto.UserResponse;
+import com.chat.chatback.user.model.User;
+import com.chat.chatback.user.model.UserMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -16,6 +22,7 @@ public class UserService {
     private final UserRepository userRepository;
     private final AuthenticationManager authenticationManager;
     private final JwtUtils jwtUtils;
+    private final AuthenticationFacade authenticationFacade;
 
     private User findUserById(long id){
         return userRepository.findById(id)
@@ -46,4 +53,9 @@ public class UserService {
     }
 
 
+    public UserResponse currentUser() {
+        User user = authenticationFacade.getAuthenticatedUser();
+
+        return UserMapper.entityToResponse(user);
+    }
 }

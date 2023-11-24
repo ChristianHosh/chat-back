@@ -1,4 +1,4 @@
-package com.chat.chatback.user;
+package com.chat.chatback.user.model;
 
 import jakarta.persistence.*;
 import lombok.*;

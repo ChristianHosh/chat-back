@@ -1,9 +1,9 @@
-package com.chris.socialbox.security.auth;
+package com.chat.chatback.security.auth;
 
-import com.chris.socialbox.model.User;
+import com.chat.chatback.user.model.User;
 import org.springframework.security.core.Authentication;
 
-public interface IAuthenticationFacade {
+public interface AuthenticationFacade {
     Authentication getAuthentication();
     User getAuthenticatedUser();
     User getAuthenticatedUserOrNull();

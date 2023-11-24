@@ -1,5 +1,6 @@
-package com.chat.chatback.user;
+package com.chat.chatback.user.service;
 
+import com.chat.chatback.user.model.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;

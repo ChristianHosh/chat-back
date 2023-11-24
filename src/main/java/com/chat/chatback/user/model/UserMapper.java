@@ -1,5 +1,7 @@
-package com.chat.chatback.user;
+package com.chat.chatback.user.model;
 
+import com.chat.chatback.user.dto.RegisterRequest;
+import com.chat.chatback.user.dto.UserResponse;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
