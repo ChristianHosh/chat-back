@@ -6,6 +6,7 @@ import com.chat.chatback.user.dto.RegisterRequest;
 import com.chat.chatback.user.dto.UserResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
@@ -30,10 +31,21 @@ public class UserController {
         return userService.register(registerRequest);
     }
 
-    @GetMapping("/")
+    @GetMapping("/me")
     @ResponseBody
     @ResponseStatus(HttpStatus.OK)
     public UserResponse currentUser(){
         return userService.currentUser();
+    }
+
+    @GetMapping("")
+    @ResponseBody
+    @ResponseStatus(HttpStatus.OK)
+    public Page<UserResponse> findUsers(
+            @RequestParam(name = "page") int page,
+            @RequestParam(name = "size") int size,
+            @RequestParam(name = "name") String name
+    ){
+        return userService.findUsers(page, size, name);
     }
 }

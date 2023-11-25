@@ -9,6 +9,10 @@ import com.chat.chatback.user.dto.UserResponse;
 import com.chat.chatback.user.model.User;
 import com.chat.chatback.user.model.UserMapper;
 import lombok.RequiredArgsConstructor;
+import org.jetbrains.annotations.NotNull;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -34,7 +38,7 @@ public class UserService {
                 .orElseThrow(() -> new HttpNotFoundException("user not found with username '" + username + "'"));
     }
 
-    public UserResponse login(LoginRequest loginRequest) {
+    public UserResponse login(@NotNull LoginRequest loginRequest) {
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(loginRequest.username(), loginRequest.password()));
 
@@ -46,16 +50,23 @@ public class UserService {
         return UserMapper.entityToResponse(user, jwt);
     }
 
-    public UserResponse register(RegisterRequest registerRequest) {
+    public UserResponse register(@NotNull RegisterRequest registerRequest) {
         userRepository.save(UserMapper.requestToEntity(registerRequest));
 
         return login(new LoginRequest(registerRequest.username(), registerRequest.password()));
     }
 
-
     public UserResponse currentUser() {
         User user = authenticationFacade.getAuthenticatedUser();
 
         return UserMapper.entityToResponse(user);
+    }
+
+    public Page<UserResponse> findUsers(int page, int size, String name){
+        Pageable pageable = PageRequest.of(page, size);
+
+        Page<User> userPage = userRepository.findUsers(name, pageable);
+
+        return userPage.map(UserMapper::entityToResponse);
     }
 }
