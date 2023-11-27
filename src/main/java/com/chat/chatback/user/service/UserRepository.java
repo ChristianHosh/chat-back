@@ -15,9 +15,12 @@ public interface UserRepository extends JpaRepository<User, Long> {
     @Query("""
     SELECT u FROM User u
     WHERE (
-        (:name IS NOT NULL AND LOWER(u.displayName) LIKE LOWER(CONCAT('%',:name, '%'))) OR
-        (:name IS NOT NULL AND LOWER(u.username) LIKE LOWER(CONCAT('%',:name, '%')))
+        (:name IS NULL OR LOWER(u.displayName) LIKE LOWER(CONCAT('%',:name, '%'))) AND
+        (:name IS NULL OR LOWER(u.username) LIKE LOWER(CONCAT('%',:name, '%'))) AND
+        (u.id <> :currentUserId)
     )
     """)
-    Page<User> findUsers(String name, Pageable pageable);
+    Page<User> findUsersWithoutCurrent(String name, Long currentUserId, Pageable pageable);
+
+
 }

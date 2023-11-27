@@ -3,15 +3,15 @@ package com.chat.chatback.chat.dto;
 import lombok.Builder;
 
 import java.io.Serializable;
-import java.sql.Date;
+import java.sql.Timestamp;
 
 @Builder
 public record ChatMessageResponse(
         Long id,
+        Long chatChannelId,
         String content,
-        String senderUsername,
-        Date timeSent,
-        Long chatChannelId
+        String sender,
+        Timestamp timeSent
 
 ) implements Serializable {
     @Override
@@ -19,9 +19,8 @@ public record ChatMessageResponse(
         return "ChatMessageResponse{" +
                 "id=" + id +
                 ", content='" + content + '\'' +
-                ", senderUsername='" + senderUsername + '\'' +
+                ", sender='" + sender + '\'' +
                 ", timeSent=" + timeSent +
-                ", chatChannelId=" + chatChannelId +
                 '}';
     }
 }

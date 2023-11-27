@@ -4,7 +4,8 @@ import com.chat.chatback.chat.dto.ChatMessageRequest;
 import com.chat.chatback.chat.dto.ChatMessageResponse;
 import com.chat.chatback.user.model.User;
 
-import java.sql.Date;
+import java.sql.Timestamp;
+import java.time.Instant;
 
 public class ChatMessageMapper {
 
@@ -12,7 +13,7 @@ public class ChatMessageMapper {
         return ChatMessage.builder()
                 .sender(sender)
                 .chatChannel(chatChannel)
-                .timeSent(new Date(System.currentTimeMillis()))
+                .timeSent(Timestamp.from(Instant.now()))
                 .content(chatMessageRequest.content())
                 .build();
     }
@@ -21,7 +22,7 @@ public class ChatMessageMapper {
         return ChatMessageResponse.builder()
                 .id(chatMessage.getId())
                 .chatChannelId(chatMessage.getChatChannel().getId())
-                .senderUsername(chatMessage.getSender().getUsername())
+                .sender(chatMessage.getSender().getUsername())
                 .content(chatMessage.getContent())
                 .timeSent(chatMessage.getTimeSent())
                 .build();

@@ -38,13 +38,20 @@ public class UserController {
         return userService.currentUser();
     }
 
+    @GetMapping("/{username}")
+    @ResponseBody
+    @ResponseStatus(HttpStatus.OK)
+    public UserResponse findUserByUsername(@PathVariable String username){
+        return userService.findUserByUsername(username);
+    }
+
     @GetMapping("")
     @ResponseBody
     @ResponseStatus(HttpStatus.OK)
     public Page<UserResponse> findUsers(
             @RequestParam(name = "page") int page,
             @RequestParam(name = "size") int size,
-            @RequestParam(name = "name") String name
+            @RequestParam(name = "name", required = false) String name
     ){
         return userService.findUsers(page, size, name);
     }

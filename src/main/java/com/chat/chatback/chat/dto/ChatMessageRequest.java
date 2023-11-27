@@ -4,14 +4,15 @@ import java.io.Serializable;
 
 public record ChatMessageRequest(
         String content,
-        String senderUsername,
+        String sender,
         Long chatChannelId
+
 ) implements Serializable {
     @Override
     public String toString() {
         return "ChatMessageRequest{" +
                 "content='" + content + '\'' +
-                ", senderUsername='" + senderUsername + '\'' +
+                ", sender='" + sender + '\'' +
                 ", chatChannelId=" + chatChannelId +
                 '}';
     }

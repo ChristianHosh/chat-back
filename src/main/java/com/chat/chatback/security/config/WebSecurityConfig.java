@@ -1,4 +1,4 @@
-package com.chat.chatback.security;
+package com.chat.chatback.security.config;
 
 import com.chat.chatback.security.jwt.AuthEntryPointJwt;
 import com.chat.chatback.security.jwt.AuthTokenFilter;

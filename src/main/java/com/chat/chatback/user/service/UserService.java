@@ -28,12 +28,12 @@ public class UserService {
     private final JwtUtils jwtUtils;
     private final AuthenticationFacade authenticationFacade;
 
-    private User findUserById(long id){
+    private User findUserEntityById(long id){
         return userRepository.findById(id)
                 .orElseThrow(() -> new HttpNotFoundException("user not found with id '" + id + "'"));
     }
 
-    private User findUserByUsername(String username){
+    private User findUserEntityByUsername(String username){
         return userRepository.findByUsername(username)
                 .orElseThrow(() -> new HttpNotFoundException("user not found with username '" + username + "'"));
     }
@@ -45,7 +45,7 @@ public class UserService {
         SecurityContextHolder.getContext().setAuthentication(authentication);
         String jwt = jwtUtils.generateJwtToken(authentication);
 
-        User user = findUserByUsername(loginRequest.username());
+        User user = findUserEntityByUsername(loginRequest.username());
 
         return UserMapper.entityToResponse(user, jwt);
     }
@@ -65,8 +65,16 @@ public class UserService {
     public Page<UserResponse> findUsers(int page, int size, String name){
         Pageable pageable = PageRequest.of(page, size);
 
-        Page<User> userPage = userRepository.findUsers(name, pageable);
+        User currentUser = authenticationFacade.getAuthenticatedUser();
+
+        Page<User> userPage = userRepository.findUsersWithoutCurrent(name, currentUser.getId(), pageable);
 
         return userPage.map(UserMapper::entityToResponse);
+    }
+
+    public UserResponse findUserByUsername(String username) {
+        User user = findUserEntityByUsername(username);
+
+        return UserMapper.entityToResponse(user);
     }
 }
