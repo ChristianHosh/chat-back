@@ -1,5 +1,6 @@
 package com.chat.chatback.chat.dto;
 
+import com.chat.chatback.user.dto.UserResponse;
 import lombok.Builder;
 
 import java.io.Serializable;
@@ -10,7 +11,7 @@ public record ChatMessageResponse(
         Long id,
         Long chatChannelId,
         String content,
-        String sender,
+        UserResponse sender,
         Timestamp timeSent
 
 ) implements Serializable {
